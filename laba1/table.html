@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Таблица</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    label, input, button { display: block; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>Таблица</h1>
+  <label for="rows">Количество строк:</label>
+  <input type="number" id="rows" min="1" placeholder="например, 5">
+  <button id="drawBtn">Рисовать</button>
+
+  <script>
+    document.getElementById('drawBtn').addEventListener('click', drawTable);
+
+    function drawTable() {
+      var input = document.getElementById('rows');
+      var n = parseInt(input.value, 10);
+      if (isNaN(n) || n < 1) {
+        console.error('Введите корректное число строк (минимум 1)');
+        return;
+      }
+
+      var pattern = ['dog', 'dog', 'dog', 'cat', 'cat'];
+      var counter = 0;
+
+      for (var i = 0; i < n; i++) {
+        var row = [];
+        for (var j = 0; j < 6; j++) {
+          row.push(pattern[counter % pattern.length]);
+          counter++;
+        }
+        console.log(row.join('\t'));
+      }
+    }
+  </script>
+</body>
+</html>
