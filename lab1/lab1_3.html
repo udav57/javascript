@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ввод числа</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    a { display: inline-block; margin-top: 20px; text-decoration: none; color: #007BFF; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Ввод числа</h1>
+  <!-- Ссылка на главную страницу -->
+  <a href="index.html" id="getNumber">Получить число</a>
+
+  <script>
+    document.getElementById('getNumber').addEventListener('click', function(event) {
+      event.preventDefault(); // отменяем переход до проверки
+
+      var ok = false;
+      var value;
+
+      
+      while (true) {
+        value = prompt('Введите число больше 100:', '');
+        if (value === null) {
+          // ESC или Отмена
+          ok = false;
+          break;
+        }
+        value = parseFloat(value);
+        if (!isNaN(value) && value > 100) {
+          // Условие выполнено
+          ok = true;
+          break;
+        }
+        // Иначе повторить
+      }
+
+      if (ok) {
+        // Если введено корректное число — переходим
+        window.location.href = this.href;
+      } else {
+        //  спрашиваем подтверждение перехода
+        var confirmGo = confirm('Вы не ввели число больше 100. Продолжить переход?');
+        if (confirmGo) {
+          window.location.href = this.href;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
