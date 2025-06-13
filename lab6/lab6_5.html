@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Кастомный Prompt</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        #show-prompt-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .prompt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .prompt-form-container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 450px;
+            max-width: 95%;
+            text-align: center;
+            transform: scale(1);
+        }
+        .prompt-message {
+            margin-bottom: 20px;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+        .prompt-form-container input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .prompt-form-container input[type="text"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        .prompt-buttons button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            min-width: 100px;
+        }
+        .prompt-buttons .ok-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .prompt-buttons .ok-btn:hover {
+            background-color: #0056b3;
+        }
+        .prompt-buttons .cancel-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        .prompt-buttons .cancel-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="show-prompt-btn">Показать prompt</button>
+
+    <script>
+        function showPrompt(html, callback) {
+            const overlay = document.createElement('div');
+            overlay.className = 'prompt-overlay';
+            
+            const form = document.createElement('form');
+            form.className = 'prompt-form-container';
+
+            const messageElem = document.createElement('div');
+            messageElem.className = 'prompt-message';
+            messageElem.innerHTML = html;
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.required = true;
+
+            const buttonsContainer = document.createElement('div');
+            buttonsContainer.className = 'prompt-buttons';
+
+            const okButton = document.createElement('button');
+            okButton.type = 'submit';
+            okButton.className = 'ok-btn';
+            okButton.textContent = 'OK';
+
+            const cancelButton = document.createElement('button');
+            cancelButton.type = 'button';
+            cancelButton.className = 'cancel-btn';
+            cancelButton.textContent = 'ОТМЕНА';
+
+            buttonsContainer.append(okButton, cancelButton);
+            form.append(messageElem, input, buttonsContainer);
+            overlay.append(form);
+
+            document.body.append(overlay);
+            input.focus();
+
+            function complete(value) {
+                form.removeEventListener('keydown', handleKeyDown);
+                overlay.remove();
+                callback(value);
+            }
+
+            function handleKeyDown(event) {
+                if (event.key === 'Escape') {
+                    complete(null);
+                    return;
+                }
+
+                if (event.key === 'Tab') {
+                    const focusableElements = [input, okButton, cancelButton];
+                    const activeElement = document.activeElement;
+                    const currentIndex = focusableElements.indexOf(activeElement);
+                    
+                    let nextIndex;
+                    if (event.shiftKey) {
+                        nextIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+                    } else {
+                        nextIndex = (currentIndex + 1) % focusableElements.length;
+                    }
+
+                    event.preventDefault();
+                    focusableElements[nextIndex].focus();
+                }
+            }
+
+            form.addEventListener('keydown', handleKeyDown);
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                complete(input.value);
+            });
+            
+            cancelButton.addEventListener('click', () => {
+                complete(null);
+            });
+        }
+
+        document.getElementById('show-prompt-btn').onclick = () => {
+            showPrompt("Введите что-нибудь<br>... умное :)", function(value) {
+                if (value === null) {
+                    alert("Вы отменили ввод.");
+                } else if (value.trim() === '') {
+                    alert("Вы ничего не ввели!");
+                } else {
+                    alert(`Вы ввели: "${value}"`);
+                }
+            });
+        };
+    </script>
+
+</body>
+</html>
