@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Считать ворон</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    form { max-width: 300px; margin-bottom: 20px; }
+    input, button { margin-top: 10px; display: block; }
+  </style>
+</head>
+<body>
+  <h1>Считать ворон</h1>
+  <form id="crowForm">
+    <label>Введите число ворон:
+      <input type="number" id="num" min="0" required>
+    </label>
+    <button type="submit">Считать</button>
+  </form>
+
+  <script>
+    document.getElementById('crowForm').addEventListener('submit', function(event) {
+      event.preventDefault(); 
+
+      const n = parseInt(document.getElementById('num').value, 10);
+      if (isNaN(n) || n < 0) {
+        alert('Введите корректное неотрицательное число');
+        return;
+      }
+
+      let form;
+      const rem100 = n % 100;
+      const rem10 = n % 10;
+
+      if (rem100 >= 11 && rem100 <= 14) {
+        form = 'ворон';
+      } else {
+        switch (rem10) {
+          case 1:
+            form = 'ворона';
+            break;
+          case 2:
+          case 3:
+          case 4:
+            form = 'вороны';
+            break;
+          default:
+            form = 'ворон';
+        }
+      }
+
+      alert(`На ветке сидит ${n} ${form}`);
+    });
+  </script>
+</body>
+</html>

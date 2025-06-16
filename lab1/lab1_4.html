@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Простые числа</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    label, input, button { display: block; margin: 10px 0; }
+    #result { margin-top: 20px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Простые числа</h1>
+  <form id="primeForm">
+    <label for="n">Введите натуральное число &gt;= 2:</label>
+    <input type="number" id="n" min="2" placeholder="например, 100" required>
+    <button type="submit">Найти</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('primeForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const input = document.getElementById('n');
+      const max = parseInt(input.value, 10);
+      const resultDiv = document.getElementById('result');
+      resultDiv.textContent = '';
+
+      if (isNaN(max) || max < 2) {
+        resultDiv.textContent = 'Пожалуйста, введите число больше или равное 2.';
+        return;
+      }
+
+      const primes = [];
+      for (let i = 2; i <= max; i++) {
+        if (isPrime(i)) primes.push(i);
+      }
+
+      resultDiv.textContent = `Простые числа от 2 до ${max}:\n${primes.join(', ')}`;
+    });
+
+    function isPrime(num) {
+      if (num < 2) return false;
+      const limit = Math.sqrt(num);
+      for (let j = 2; j <= limit; j++) {
+        if (num % j === 0) return false;
+      }
+      return true;
+    }
+  </script>
+</body>
+</html>
