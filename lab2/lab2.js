@@ -23,7 +23,7 @@ function pow(x, n) {
  * @returns {number} - Сумма чисел от 1 до n.
  */
 const sumTo = new Function('n', 'return n * (n + 1) / 2;');
-s
+
 
 // console.log(sumTo(100)); // 5050
 
